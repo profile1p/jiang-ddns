@@ -1,5 +1,7 @@
 package fun.jiangjiang.jiangddns.bean.po;
 
+import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,10 +17,15 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table
-public class IpChangeHistory {
+public class IpUpdateHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ipChangeHistoryId;
+    private Long ipUpdateHistoryId;
 
+    @Column
+    private String currentIpAddress;
+
+    @Column
+    private LocalDateTime updateTime;
 }

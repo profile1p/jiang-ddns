@@ -1,3 +1,5 @@
+server:
+  port: 40040
 spring:
   application:
     name: jiang-ddns
@@ -17,3 +19,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  cache:
+    type: jcache
+    jcache:
+      config: ehcache.xml
