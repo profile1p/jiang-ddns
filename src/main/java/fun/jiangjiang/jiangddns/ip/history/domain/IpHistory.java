@@ -1,4 +1,4 @@
-package fun.jiangjiang.jiangddns.bean.po;
+package fun.jiangjiang.jiangddns.ip.history.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;

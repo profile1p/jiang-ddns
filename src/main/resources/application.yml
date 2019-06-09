@@ -1,4 +1,9 @@
 debug: true
+jiang:
+  ip-obtaining:
+    strategy: http-string
+    http-string:
+      url: http://www.bing.com
 server:
   port: 40040
 spring:

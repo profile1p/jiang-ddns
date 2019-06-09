@@ -1,4 +1,4 @@
-package fun.jiangjiang.jiangddns.task;
+package fun.jiangjiang.jiangddns.scheduling;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class DynamicFlushDnsJob {
+public class DynamicFlushDnsTask {
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */3 * * * *")
     public void dynamicFlushDns() {
 
 //        log.info();
