@@ -1,8 +1,9 @@
 package fun.jiangjiang.jiangddns.ip.history.dao;
 
 import fun.jiangjiang.jiangddns.ip.history.domain.IpHistory;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 /**
  * @author LLX
