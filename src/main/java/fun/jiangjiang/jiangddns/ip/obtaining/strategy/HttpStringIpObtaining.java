@@ -2,15 +2,19 @@ package fun.jiangjiang.jiangddns.ip.obtaining.strategy;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Optional;
 
@@ -18,22 +22,31 @@ import java.util.Optional;
  * @author Lilx
  * @since 2019
  */
+@Slf4j
 public class HttpStringIpObtaining implements IpObtaining {
 
     private static final String CONFIG_NAME = "http-string";
-    private URL obtainingUrl;
+    private URI obtainingUri;
     private HttpClient httpClient;
+    private HttpRequest.Builder httpRequestBuilder;
 
-    public HttpStringIpObtaining(URL obtainingUrl, Duration connectTimeout) {
-        this.obtainingUrl = obtainingUrl;
+    private HttpStringIpObtaining(HttpStringIpObtainingProperties properties) throws URISyntaxException {
+        this.obtainingUri = properties.getUrl().toURI();
         httpClient = HttpClient.newBuilder()
-                .connectTimeout(connectTimeout)
+                .connectTimeout(Optional.ofNullable(properties.getConnectTimeout()).orElseGet(() -> Duration.ofSeconds(10)))
                 .build();
+        httpRequestBuilder = HttpRequest.newBuilder().GET();
     }
 
     @Override
     public String obtainIp() {
-        // TODO:llx
+        try {
+            return httpClient.send(httpRequestBuilder.uri(obtainingUri).build(),
+                    HttpResponse.BodyHandlers.ofString()
+            ).body();
+        } catch (IOException | InterruptedException e) {
+            log.error("obtain IP address failed.", e);
+        }
         return null;
     }
 
@@ -51,17 +64,15 @@ public class HttpStringIpObtaining implements IpObtaining {
         }
 
         @Bean
-        public IpObtaining ipObtaining() throws MalformedURLException {
-            return new HttpStringIpObtaining(new URL(properties.getUrl()),
-                    Optional.ofNullable(properties.getConnectTimeout()).orElseGet(() -> Duration.ofSeconds(10)));
+        public IpObtaining ipObtaining() throws URISyntaxException {
+            return new HttpStringIpObtaining(properties);
         }
     }
 
     @Getter
     @Setter
-    @ConfigurationProperties(prefix = IpObtaining.CONFIG_PREFIX + CONFIG_NAME)
+    @ConfigurationProperties(IpObtaining.CONFIG_PREFIX + "." + CONFIG_NAME)
     public static class HttpStringIpObtainingProperties extends HttpIpObtainingProperties {
 
-        private String url;
     }
 }
