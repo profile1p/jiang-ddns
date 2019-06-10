@@ -1,6 +1,11 @@
 package fun.jiangjiang.jiangddns.ip.history.domain;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,14 +14,16 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
 /**
  * @author LLX
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "ip_history", indexes = @Index(columnList = "updateTime"))
 public class IpHistory {

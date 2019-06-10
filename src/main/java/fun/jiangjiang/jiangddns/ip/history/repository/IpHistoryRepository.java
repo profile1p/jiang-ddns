@@ -1,6 +1,7 @@
 package fun.jiangjiang.jiangddns.ip.history.repository;
 
 import fun.jiangjiang.jiangddns.ip.history.domain.IpHistory;
+
 import java.util.Optional;
 
 /**
