@@ -5,6 +5,11 @@ jiang:
     http-string:
       url: http://members.3322.org/dyndns/getip
       connect-timeout: 5s
+  ip-flushing:
+    strategy: aliyun
+    aliyun:
+      access-key-id:
+      access-key-secret:
 server:
   port: 40040
 spring:
