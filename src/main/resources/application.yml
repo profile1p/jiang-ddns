@@ -4,6 +4,7 @@ jiang:
     strategy: http-string
     http-string:
       url: http://www.bing.com
+      connect-timeout: 5s
 server:
   port: 40040
 spring:
