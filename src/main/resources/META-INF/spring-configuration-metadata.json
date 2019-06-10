@@ -1,0 +1,34 @@
+{
+  "groups": [
+    {
+      "name": "jiang.ip-obtaining",
+      "type": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.IpObtainingStrategyProperties",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.IpObtainingStrategyProperties"
+    },
+    {
+      "name": "jiang.ip-obtaining.http-string",
+      "type": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.HttpStringIpObtaining$HttpStringIpObtainingProperties",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.HttpStringIpObtaining$HttpStringIpObtainingProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "jiang.ip-obtaining.http-string.connect-timeout",
+      "type": "java.time.Duration",
+      "description": "HTTP connection timeout",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.HttpStringIpObtaining$HttpStringIpObtainingProperties"
+    },
+    {
+      "name": "jiang.ip-obtaining.http-string.url",
+      "type": "java.net.URL",
+      "description": "URL to obtaining IP address, full url includes http\/https protocol words",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.HttpStringIpObtaining$HttpStringIpObtainingProperties"
+    },
+    {
+      "name": "jiang.ip-obtaining.strategy",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.IpObtainingStrategyProperties"
+    }
+  ],
+  "hints": []
+}

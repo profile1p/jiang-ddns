@@ -1,4 +1,4 @@
-package fun.jiangjiang.jiangddns.ip.obtaining.strategy;
+package fun.jiangjiang.jiangddns.ip.flush.strategy;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @SuppressWarnings("ConfigurationProperties")
 @Getter
 @Setter
-@ConfigurationProperties(IpObtaining.CONFIG_PREFIX)
-public class IpObtainingStrategyProperties {
+@ConfigurationProperties(IpFlushing.CONFIG_PREFIX)
+public class IpFlushingStrategyProperties {
 
     private String strategy;
 }
