@@ -3,7 +3,7 @@ jiang:
   ip-obtaining:
     strategy: http-string
     http-string:
-      url: http://www.bing.com
+      url: http://members.3322.org/dyndns/getip
       connect-timeout: 5s
 server:
   port: 40040

@@ -20,7 +20,6 @@ repositories {
 }
 
 ext {
-    aliyun_httpdns_version = '2.1.1'
 }
 
 dependencies {
@@ -32,9 +31,12 @@ dependencies {
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.4.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    
-    implementation "com.aliyun:aliyun-java-sdk-httpdns:${aliyun_httpdns_version}"
+
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'com.aliyun:aliyun-java-sdk-core:4.4.2'
+    implementation 'com.aliyun:aliyun-java-sdk-alidns:2.0.7'
 }
