@@ -2,32 +2,49 @@ package fun.jiangjiang.jiangddns.ip.flush.strategy;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
+import com.aliyuncs.alidns.model.v20150109.DescribeDomainRecordsRequest;
 import com.aliyuncs.alidns.model.v20150109.DescribeDomainRecordsResponse;
 import com.aliyuncs.alidns.model.v20150109.UpdateDomainRecordRequest;
+import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.stream.Stream;
 
 /**
  * @author Lilx
  * @since 2019
  */
+@Slf4j
+@Service
 public class AliyunIpFlushing implements IpFlushing {
 
     private static final String CONFIG_NAME = "aliyun";
 
+    private AliyunIpFlushingProperties properties;
     private IAcsClient acsClient;
 
     private AliyunIpFlushing(AliyunIpFlushingProperties properties) {
+        this.properties = properties;
         IClientProfile acsClientProfile = DefaultProfile.getProfile(
                 Optional.ofNullable(properties.getRegionId()).orElse("cn-hangzhou"),
                 Objects.requireNonNull(properties.getAccessKeyId()),
@@ -38,10 +55,68 @@ public class AliyunIpFlushing implements IpFlushing {
 
     @Override
     public void flushIp(String ip) {
-        // TODO:llx 先查询后根据条件过滤需要更新的条目的recordId并更新
-        DescribeDomainRecordsResponse describeResponse = new DescribeDomainRecordsResponse();
-        UpdateDomainRecordRequest updateRequest = new UpdateDomainRecordRequest();
+        ip = ip.replaceAll("[^0-9.]+", "");
+        AliyunIpFlushingProperties.DomainRecordsCondition condition = properties.getCondition();
+        DescribeDomainRecordsRequest describeRequest = new DescribeDomainRecordsRequest();
+        describeRequest.setDomainName(condition.getDomainName());
+        describeRequest.setPageSize(condition.getPageSize());
+        describeRequest.setRRKeyWord(condition.getRrKeyWord());
+        describeRequest.setTypeKeyWord(condition.getTypeKeyWord());
+        describeRequest.setValueKeyWord(condition.getValueKeyWord());
+        try {
+            DescribeDomainRecordsResponse describeResponse;
+            List<DescribeDomainRecordsResponse.Record> domainRecordList = new ArrayList<>(condition.getPageSize().intValue());
+            LongAdder pageNumber = new LongAdder();
+            do {
+                pageNumber.increment();
+                describeRequest.setPageNumber(pageNumber.longValue());
+                describeResponse = acsClient.getAcsResponse(describeRequest);
+                if (CollectionUtils.isNotEmpty(describeResponse.getDomainRecords())) {
+                    domainRecordList.addAll(describeResponse.getDomainRecords());
+                }
+            } while (describeResponse.getTotalCount() > domainRecordList.size()
+                    && CollectionUtils.isNotEmpty(describeResponse.getDomainRecords())
+                    && describeResponse.getDomainRecords().size() == describeResponse.getPageSize());
+            flushIp(domainRecordList, condition, ip);
+        } catch (ClientException e) {
+            log.error("flush DNS failed.", e);
+            throw new RuntimeException(e);
+        }
+    }
 
+    private void flushIp(List<DescribeDomainRecordsResponse.Record> recordList,
+                         AliyunIpFlushingProperties.DomainRecordsCondition condition,
+                         String ip) {
+        Stream<DescribeDomainRecordsResponse.Record> recordStream = recordList.stream();
+        if (StringUtils.isNotBlank(condition.getRemarkRegex())) {
+            recordStream = recordStream.filter(record -> Optional.ofNullable(record)
+                    .map(DescribeDomainRecordsResponse.Record::getRemark)
+                    .map(remark -> remark.matches(condition.getRemarkRegex()))
+                    .orElse(false));
+        }
+        recordStream.map(record -> {
+            UpdateDomainRecordRequest updateRequest = new UpdateDomainRecordRequest();
+            updateRequest.setRecordId(record.getRecordId());
+            updateRequest.setRR(record.getRR());
+            updateRequest.setType(record.getType());
+            updateRequest.setValue(ip);
+            updateRequest.setTTL(record.getTTL());
+            updateRequest.setPriority(record.getPriority());
+            updateRequest.setLine(record.getLine());
+            return updateRequest;
+        }).forEach(updateRequest -> {
+            try {
+                acsClient.getAcsResponse(updateRequest);
+//                        log.info();
+            } catch (ClientException e) {
+                // TODO:jiang
+/*                try {
+                    log.error(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(updateRequest), e);
+                } catch (JsonProcessingException e1) {
+                    log.error("", e1);
+                }*/
+            }
+        });
     }
 
     @Configuration
@@ -71,6 +146,19 @@ public class AliyunIpFlushing implements IpFlushing {
         private String regionId;
         private String accessKeyId;
         private String accessKeySecret;
-        // TODO:llx 增加过滤条件
+        @NestedConfigurationProperty
+        private DomainRecordsCondition condition = new DomainRecordsCondition();
+
+        @Getter
+        @Setter
+        private static class DomainRecordsCondition {
+
+            private String domainName;
+            private Long pageSize = 50L;
+            private String rrKeyWord;
+            private String typeKeyWord;
+            private String valueKeyWord;
+            private String remarkRegex;
+        }
     }
 }
