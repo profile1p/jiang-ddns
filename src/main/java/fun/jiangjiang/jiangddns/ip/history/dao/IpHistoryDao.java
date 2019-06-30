@@ -10,5 +10,5 @@ import java.util.Optional;
  */
 public interface IpHistoryDao extends JpaRepository<IpHistory, Long> {
 
-    Optional<IpHistory> findFirstByOrderByUpdateTimeDesc();
+    Optional<IpHistory> findFirstByOrderByCreationTimeDesc();
 }

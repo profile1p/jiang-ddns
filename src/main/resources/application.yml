@@ -10,6 +10,11 @@ jiang:
     aliyun:
       access-key-id:
       access-key-secret:
+      condition:
+        domain-name:
+        remark-regex:
+  dynamic-flush-dns:
+    cron: 0 */3 * * * *
 server:
   port: 40040
 spring:
@@ -35,7 +40,7 @@ spring:
   cache:
     type: jcache
     jcache:
-      config: ehcache.xml
+      config: classpath:ehcache.xml
 logging:
   level:
     org.springframework.boot.autoconfigure: error

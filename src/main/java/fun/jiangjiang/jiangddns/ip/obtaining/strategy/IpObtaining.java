@@ -1,6 +1,8 @@
 package fun.jiangjiang.jiangddns.ip.obtaining.strategy;
 
 /**
+ * 获取IP的策略接口
+ *
  * @author Lilx
  * @since 2019
  */

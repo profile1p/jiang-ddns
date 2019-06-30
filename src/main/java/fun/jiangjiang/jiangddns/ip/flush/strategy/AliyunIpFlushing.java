@@ -8,8 +8,6 @@ import com.aliyuncs.alidns.model.v20150109.UpdateDomainRecordRequest;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -107,14 +105,10 @@ public class AliyunIpFlushing implements IpFlushing {
         }).forEach(updateRequest -> {
             try {
                 acsClient.getAcsResponse(updateRequest);
-//                        log.info();
+                log.info("flush ip to [".concat(updateRequest.getValue()).concat("] succeed"));
             } catch (ClientException e) {
-                // TODO:jiang
-/*                try {
-                    log.error(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(updateRequest), e);
-                } catch (JsonProcessingException e1) {
-                    log.error("", e1);
-                }*/
+                log.error("flush ip to [".concat(updateRequest.getValue()).concat("] failed"));
+                log.error(updateRequest.toString(), e);
             }
         });
     }

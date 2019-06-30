@@ -43,11 +43,11 @@ public class HttpStringIpObtaining implements IpObtaining {
         try {
             return httpClient.send(httpRequestBuilder.uri(obtainingUri).build(),
                     HttpResponse.BodyHandlers.ofString()
-            ).body();
+            ).body().replaceAll("[^0-9.]+", "");
         } catch (IOException | InterruptedException e) {
             log.error("obtain IP address failed.", e);
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Configuration

@@ -1,6 +1,22 @@
 {
   "groups": [
     {
+      "name": "jiang.ip-flushing",
+      "type": "fun.jiangjiang.jiangddns.ip.flush.strategy.IpFlushingStrategyProperties",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.IpFlushingStrategyProperties"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun",
+      "type": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.condition",
+      "type": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties$DomainRecordsCondition",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties",
+      "sourceMethod": "getCondition()"
+    },
+    {
       "name": "jiang.ip-obtaining",
       "type": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.IpObtainingStrategyProperties",
       "sourceType": "fun.jiangjiang.jiangddns.ip.obtaining.strategy.IpObtainingStrategyProperties"
@@ -12,6 +28,57 @@
     }
   ],
   "properties": [
+    {
+      "name": "jiang.ip-flushing.aliyun.access-key-id",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.access-key-secret",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.condition.domain-name",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties$DomainRecordsCondition"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.condition.page-size",
+      "type": "java.lang.Long",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties$DomainRecordsCondition",
+      "defaultValue": 50
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.condition.remark-regex",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties$DomainRecordsCondition"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.condition.rr-key-word",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties$DomainRecordsCondition"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.condition.type-key-word",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties$DomainRecordsCondition"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.condition.value-key-word",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties$DomainRecordsCondition"
+    },
+    {
+      "name": "jiang.ip-flushing.aliyun.region-id",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.AliyunIpFlushing$AliyunIpFlushingProperties"
+    },
+    {
+      "name": "jiang.ip-flushing.strategy",
+      "type": "java.lang.String",
+      "sourceType": "fun.jiangjiang.jiangddns.ip.flush.strategy.IpFlushingStrategyProperties"
+    },
     {
       "name": "jiang.ip-obtaining.http-string.connect-timeout",
       "type": "java.time.Duration",
