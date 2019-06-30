@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "ip_history", indexes = @Index(columnList = "updateTime"))
+@Table(name = "ip_history", indexes = @Index(columnList = "creationTime"))
 public class IpHistory {
 
     @Id
@@ -41,8 +42,9 @@ public class IpHistory {
     private Long ipHistoryId;
 
     @Column(length = 16)
-    private String currentIpAddress;
+    private String ipAddress;
 
     @Column
-    private LocalDateTime updateTime;
+    @CreationTimestamp
+    private LocalDateTime creationTime;
 }

@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.4.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.2'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

@@ -22,7 +22,7 @@ public class IpHistoryRepositoryImpl implements IpHistoryRepository {
     @Cacheable("lastIp")
     @Override
     public Optional<IpHistory> lastIpHistory() {
-        return ipHistoryDao.findFirstByOrderByUpdateTimeDesc();
+        return ipHistoryDao.findFirstByOrderByCreationTimeDesc();
     }
 
     @CachePut("lastIp")
